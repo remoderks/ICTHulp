@@ -137,7 +137,7 @@ public class DorpsgenotenInfo {
                 dialog.getDialogPane().setContent(grid);
                 dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-                // Handle dialog result
+                // Handle dialog result and use the dorpsgenootUpdater using DorpsgenootUpdater.java
                 dialog.showAndWait().ifPresent(result -> {
                     if (result == ButtonType.OK) {
                         nameField.getText();
