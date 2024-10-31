@@ -37,11 +37,15 @@ public class DorpsgenotenInfo {
                 // Remove the selected item from the ListView
                 aanwezigenListView.getItems().remove(selectedItem);
                 // Call a method to delete the item from the database
-                // Call a method to delete the item from the database
-                dorpsgenootDeleter.deleteDorpsgenotenFromDatabase(selectedItem);
+                String [] parts = selectedItem.split(" ");
+                if (parts.length > 0) {
+                    String dorpsgenoot = parts [0];
+                    dorpsgenootDeleter.deleteDorpsgenotenFromDatabase(dorpsgenoot);
+                }
             }
         });
         updateButton.setOnAction(event -> {
+            System.out.println("Update button clicked");
             updateDorpsgenootbutton();
         });
         // Add the header, ListView, and delete button to the VBox
@@ -51,7 +55,6 @@ public class DorpsgenotenInfo {
 
     // Load patients from database into the listview.
     private void loadDorpsgenoten() {
-        System.out.println("Loading dorpsgenoten...");
         String query = "SELECT dorpsgenoot, geboortedatum, email, besturingssysteem, telefoonnummer, postcode, huisnummer, aanwezigheidsdatum FROM dorpsgenotenInfo";
         aanwezigenListView.getItems().clear(); // Clear existing items
         try (Connection conn = DatabaseHandler.getConnection(); PreparedStatement stmt = conn.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
@@ -65,7 +68,7 @@ public class DorpsgenotenInfo {
                 String huisnummer = rs.getString("huisnummer");
                 String aanwezigheidsdatum = rs.getString("aanwezigheidsdatum");
                 // Add dorpsgenoot details to the ListView
-                aanwezigenListView.getItems().add(" Naam: " + dorpsgenoot + geboortedatum + email + besturingssysteem + telefoonnummer + postcode + huisnummer + aanwezigheidsdatum);
+                aanwezigenListView.getItems().add(dorpsgenoot + " " + geboortedatum +  " " + email + " " +  besturingssysteem + " " +  telefoonnummer + " " +  postcode + " " +  huisnummer + " " +  aanwezigheidsdatum);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,17 +81,17 @@ public class DorpsgenotenInfo {
         String selectedItem = aanwezigenListView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             // Extract the dorpsgenoot's name for deletion
-            String[] parts = selectedItem.split(" - ");
-            if (parts.length == 8) {
-                String dorpsgenoot = parts[0].replace(" Naam: ", "");
-                String geboortedatum = parts[1].replace(" Geboortedatum: ", "");
-                String email = parts[2].replace(" Email: ", "");
-                String besturingssysteem = parts[3].replace(" Besturingssysteem: ", "");
-                String telefoonnummer = parts[4].replace(" Telefoonnummer: ", "");
-                String postcode = parts[5].replace(" Postcode: ", "");
-                String huisnummer = parts[6].replace(" Huisnummer: ", "");
-                String aanwezigheidsdatum = parts[7].replace(" Aanwezigheidsdatum: ", "");
-                //       dorpsgenootUpdater.updateDorpsgenoot(dorpsgenoot, geboortedatum, email, besturingssysteem, telefoonnummer, postcode, huisnummer, aanwezigheidsdatum);} //
+            String[] parts = selectedItem.split(" ");
+            if (parts.length >= 8) {
+                String dorpsgenoot = parts[0];
+                String geboortedatum = parts[1];
+                String email = parts[2];
+                String besturingssysteem = parts[3];
+                String telefoonnummer = parts[4];
+                String postcode = parts[5];
+                String huisnummer = parts[6];
+                String aanwezigheidsdatum = parts[7];
+                dorpsgenootUpdater.updateDorpsgenoot(dorpsgenoot, geboortedatum, email, besturingssysteem, telefoonnummer, postcode, huisnummer, aanwezigheidsdatum);
 
                 // create a dialog popup to update the dorpsgenoot
                 Dialog<ButtonType> dialog = new Dialog<>();
@@ -151,7 +154,6 @@ public class DorpsgenotenInfo {
                         dorpsgenootUpdater.updateDorpsgenoot(dorpsgenoot, geboortedatum, email, besturingssysteem, telefoonnummer, postcode, huisnummer, aanwezigheidsdatum);
                     }
                 });
-
 
             }
         }

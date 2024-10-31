@@ -23,7 +23,7 @@ public class DorpsgenootUpdater {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Error", "Failed to update dorpsgenoot.");
+            showAlert("Error", "Failed to update lolol.");
         }
 
 
