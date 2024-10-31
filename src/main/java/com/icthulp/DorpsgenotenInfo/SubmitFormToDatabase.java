@@ -1,5 +1,7 @@
 package com.icthulp.DorpsgenotenInfo;
 
+import com.icthulp.DatabaseHandler;
+
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -10,31 +12,36 @@ public class SubmitFormToDatabase {
 
     public static void submitForm(String dorpsgenoot, LocalDate geboortedatum, String postcode, String huisnummer,
                                   String email, String telefoonnummer, String besturingssysteem, LocalDate aanwezigheidsdatum) {
+        // Insert SQL statements, first the parent tables are updated. If the value already exists, it will be updated.
+        // For the table dorpsgenotenInfo new values are inserted.
         String insertParentSQLGeboortedatums = "INSERT INTO geboortedatums (geboortedatum) VALUES (?) ON DUPLICATE KEY UPDATE geboortedatum = VALUES(geboortedatum)";
         String insertParentSQLAanwezigheidsdatums = "INSERT INTO aanwezigheidsdatums (aanwezigheidsdatum) VALUES (?) ON DUPLICATE KEY UPDATE aanwezigheidsdatum = VALUES(aanwezigheidsdatum)";
         String insertParentSQLBesturingssystemen = "INSERT INTO besturingssystemen (besturingssysteem) VALUES (?) ON DUPLICATE KEY UPDATE besturingssysteem = VALUES(besturingssysteem)";
         String insertSQL = "INSERT INTO dorpsgenotenInfo (dorpsgenoot, geboortedatum, postcode, huisnummer, email, telefoonnummer, besturingssysteem, aanwezigheidsdatum) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
+        try (Connection conn = DatabaseHandler.getConnection()) {
             // Start transaction
             conn.setAutoCommit(false);
 
             // Insert or update parent table geboortedatums
             try (PreparedStatement pstmtParent = conn.prepareStatement(insertParentSQLGeboortedatums)) {
                 pstmtParent.setString(1, geboortedatum.toString());
+                pstmtParent.setString(2, geboortedatum.toString());
                 pstmtParent.executeUpdate();
             }
 
             // Insert or update parent table aanwezigheidsdatums
             try (PreparedStatement pstmtParent = conn.prepareStatement(insertParentSQLAanwezigheidsdatums)) {
                 pstmtParent.setString(1, aanwezigheidsdatum.toString());
+                pstmtParent.setString(2, aanwezigheidsdatum.toString());
                 pstmtParent.executeUpdate();
             }
 
             // Insert or update parent table aanwezigheidsdatums
             try (PreparedStatement pstmtParent = conn.prepareStatement(insertParentSQLBesturingssystemen)) {
                 pstmtParent.setString(1, besturingssysteem.toString());
+                pstmtParent.setString(2, besturingssysteem.toString());
                 pstmtParent.executeUpdate();
             }
 
@@ -53,7 +60,6 @@ public class SubmitFormToDatabase {
 
             // Commit transaction
             conn.commit();
-            System.out.println("Record inserted successfully!");
 
         } catch (SQLException ex) {
             System.out.println("An error occurred while inserting into the database");

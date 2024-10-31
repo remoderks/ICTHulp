@@ -28,7 +28,7 @@ public class AanmeldenPage {
         // Besturingssysteem combobox (4 options to choose from)
         ComboBox<String> besturingssysteemBox = new ComboBox<>();
         besturingssysteemBox.getItems().addAll("Windows", "MacOS", "Android", "iOS");
-        // Aanwezigheidsdatum with ComboBox (2 options to choose from)
+        // Aanwezigheidsdatum with datepicker
         DatePicker datumPicker = new DatePicker();
         // Adds all the Labels to the grid (i.e. the screen)
         grid.add(new Label("Naam"), 0, 0);

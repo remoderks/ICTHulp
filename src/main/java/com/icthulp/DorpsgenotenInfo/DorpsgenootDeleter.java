@@ -10,14 +10,17 @@ import java.sql.SQLException;
 public class DorpsgenootDeleter {
 
     public void deleteDorpsgenotenFromDatabase(String item) {
+        // Delete SQL statement for the dorpsgenotenInfo table
         String query = "DELETE FROM dorpsgenotenInfo WHERE dorpsgenoot = ?";
         try (Connection conn = DatabaseHandler.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, item);
             pstmt.executeUpdate();
+            // success alert
             showAlert("Succes", "Dorpsgenoot deleted.");
         } catch (SQLException e) {
             e.printStackTrace();
+            // error alert
             showAlert("Error", "Failed to delete dorpsgenoot.");
         }
     }
