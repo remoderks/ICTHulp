@@ -27,21 +27,18 @@ public class SubmitFormToDatabase {
             // Insert or update parent table geboortedatums
             try (PreparedStatement pstmtParent = conn.prepareStatement(insertParentSQLGeboortedatums)) {
                 pstmtParent.setString(1, geboortedatum.toString());
-                pstmtParent.setString(2, geboortedatum.toString());
                 pstmtParent.executeUpdate();
             }
 
             // Insert or update parent table aanwezigheidsdatums
             try (PreparedStatement pstmtParent = conn.prepareStatement(insertParentSQLAanwezigheidsdatums)) {
                 pstmtParent.setString(1, aanwezigheidsdatum.toString());
-                pstmtParent.setString(2, aanwezigheidsdatum.toString());
                 pstmtParent.executeUpdate();
             }
 
             // Insert or update parent table aanwezigheidsdatums
             try (PreparedStatement pstmtParent = conn.prepareStatement(insertParentSQLBesturingssystemen)) {
                 pstmtParent.setString(1, besturingssysteem.toString());
-                pstmtParent.setString(2, besturingssysteem.toString());
                 pstmtParent.executeUpdate();
             }
 

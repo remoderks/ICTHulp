@@ -37,8 +37,10 @@ public class DorpsgenotenInfo {
             if (selectedItem != null) {
                 // Remove the selected item from the ListView
                 aanwezigenListView.getItems().remove(selectedItem);
-                // Call a method to delete the item from the database
-                String [] parts = selectedItem.split(" ");
+                // Call a method to delete the item from the database. Extracts the dorpsgenoot's name for deletion.
+                // The dorpsgenootDeleter is used to delete the dorpsgenoot from the database.
+                // If not extracted correctly, the dorpsgenootDeleter will not be able to delete the dorpsgenoot due to the foreign key constraint.
+                String [] parts = selectedItem.split(",");
                 if (parts.length > 0) {
                     String dorpsgenoot = parts [0];
                     dorpsgenootDeleter.deleteDorpsgenotenFromDatabase(dorpsgenoot);
@@ -46,8 +48,7 @@ public class DorpsgenotenInfo {
             }
         });
         updateButton.setOnAction(event -> {
-            // Try and catch has to be done here because of the SQLException. This is because the updateDorpsgenootbutton method throws a SQLException.
-            updateDorpsgenootbutton();
+             updateDorpsgenootbutton();
         });
         // Add the header, ListView, and delete button to the VBox
         vbox.getChildren().addAll(header, aanwezigenListView, deleteButton, updateButton);
@@ -103,6 +104,7 @@ public class DorpsgenotenInfo {
                 Label nameLabel = new Label("Naam:");
                 TextField nameField = new TextField(dorpsgenoot);
                 Label geboortedatumLabel = new Label("Geboortedatum:");
+                // Datepicker for geboortedatum
                 DatePicker geboortedatumField = new DatePicker(LocalDate.parse(geboortedatum));
                 Label emailLabel = new Label("Email:");
                 TextField emailField = new TextField(email);
@@ -117,6 +119,7 @@ public class DorpsgenotenInfo {
                 TextField postcodeField = new TextField(postcode);
                 Label huisnummerLabel = new Label("Huisnummer:");
                 TextField huisnummerField = new TextField(huisnummer);
+                // Datepicker for aanwezigheidsdatum
                 Label aanwezigheidsdatumLabel = new Label("Aanwezigheidsdatum:");
                 DatePicker aanwezigheidsdatumField = new DatePicker(LocalDate.parse(aanwezigheidsdatum));
 
@@ -148,7 +151,7 @@ public class DorpsgenotenInfo {
                 // Handle dialog result and use the dorpsgenootUpdater using DorpsgenootUpdater.java
                 dialog.showAndWait().ifPresent(result -> {
                     if (result == ButtonType.OK) {
-                        String updatedDorpsgenoot = nameField.getText();
+                        String updatedDorpsgenoot = nameField.getText(); // get the updated dorpsgenoot name
                         String updatedGeboortedatum = geboortedatumField.getValue().toString();
                         String updatedEmail = emailField.getText();
                         String updatedBesturingssysteem = besturingssysteemBox.getValue();
@@ -158,13 +161,14 @@ public class DorpsgenotenInfo {
                         String updatedAanwezigheidsdatum = aanwezigheidsdatumField.getValue().toString();
                         try {
                             // call the dorpsgenootUpdater to update the dorpsgenoot
+                            // update using the updated dorpsgenoot name, geboortedatum, email and so on.
                             dorpsgenootUpdater.updateDorpsgenoot(updatedDorpsgenoot, updatedGeboortedatum, updatedEmail, updatedBesturingssysteem, updatedTelefoonnummer, updatedPostcode, updatedHuisnummer, updatedAanwezigheidsdatum, dorpsgenoot);
                         } catch (SQLException e) {
                             e.printStackTrace();
                             showAlert("Error", "Failed to update dorpsgenoot.");
                         }
                     }
-                    loadDorpsgenoten();
+                    loadDorpsgenoten(); // refresh the listview
                 });
 
             }

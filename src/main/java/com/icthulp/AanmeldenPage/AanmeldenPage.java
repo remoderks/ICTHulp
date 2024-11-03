@@ -78,7 +78,7 @@ public class AanmeldenPage {
             telefoonnummerField.clear();
             besturingssysteemBox.getSelectionModel().clearSelection();
             datumPicker.setValue(null);
-            showAlert("Super tof!", "Leuk dat je je hebt aangemeld!");
+            showAlert("Super gaaf!", "Leuk dat je je hebt aangemeld!");
         });
     }
 
