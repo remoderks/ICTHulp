@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class SubmitFormToDatabase {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ICTHulp";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "Gq831px9!";
+    private static final String DB_PASS = "ICTHulp";
 
     public static void submitForm(String dorpsgenoot, LocalDate geboortedatum, String postcode, String huisnummer,
                                   String email, String telefoonnummer, String besturingssysteem, LocalDate aanwezigheidsdatum) {
